@@ -1,6 +1,6 @@
 ---
 - name: Printing Hello msg. 
-  hosts: 
+  hosts: all 
   tasks: 
     - name: Printing Hello 
       debug: 
