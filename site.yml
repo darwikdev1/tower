@@ -5,7 +5,7 @@
   tasks:
   - name: Verify content of http://localhost
     uri:
-      url: http://tower.lab.example.com
+      url: http://localhost
       return_content: yes
     register: test_url
     #  failed_when: "'Hello from' not in test_url.content"
