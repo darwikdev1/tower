@@ -4,6 +4,5 @@
   tasks: 
   - user: 
       name: blackuser 
-      password: redhat 
-      state: present 
+      state: absent
     
