@@ -1,0 +1,9 @@
+--- 
+- name: 
+  hosts: asia 
+  tasks: 
+  - user: 
+      name: blackuser 
+      password: redhat 
+      state: present 
+    
