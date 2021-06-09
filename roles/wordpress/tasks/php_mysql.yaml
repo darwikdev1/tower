@@ -21,8 +21,9 @@
   dnf:
     name: python3-PyMySQL
     state: present
-- name: Starting service of database: mysql
+- name: Starting service of database- mysql
   service:
     name: mariadb
     state: started
     enabled: True
+

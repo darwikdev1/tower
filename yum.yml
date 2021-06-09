@@ -2,18 +2,18 @@
 - name: 
   hosts: servera 
   tasks: 
-  - name: 
+  - name: Copying hosts file to remote hosts 
     copy: 
       src: /etc/hosts 
       dest: /etc/hosts
-  - name: 
+  - name: Creating yum repository - AppStream
     yum_repository: 
       file: yum
       name: AppStream
       description: 'AppStream'
       baseurl: http://black.lab.com/content/rhel8.3/x86_64/dvd/AppStream 
       gpgcheck: no
-  - name: 
+  - name: Creating yum repository - BaseOS
     yum_repository: 
       file: yum
       name: BaseOS
