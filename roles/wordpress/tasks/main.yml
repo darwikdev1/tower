@@ -1,12 +1,103 @@
 ---
-# tasks file for wordpress
-- name: Installing php and mysql packages 
-  import_tasks: php_mysql.yaml
-- name: creating db users 
-  import_tasks: mysql_user.yaml
+- name: Install HTTP Packages
+  yum: name=httpd update_cache=yes state=latest
+ 
+- name: Start httpd service
+  systemd: name=httpd state=started enabled=yes
+ 
+- name: Create Apache Document Root
+  file:
+    path: "/var/www/{{ http_host }}"
+    state: directory
+    owner: "apache"
+    group: "apache"
+    mode: '0755'
+ 
+- name: Set up Apache VirtualHost
+  template:
+    src: "files/httpd.conf"
+    dest: "/etc/httpd/conf.d/{{ http_conf }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+- name: Install MySQL Packages
+  yum: name={{ item }} update_cache=yes state=latest
+  loop: [ 'mysql-server', 'php-mysqlnd', 'python3-PyMySQL' ]
 
-- name: Open Port in firewalld 
-  import_tasks: firewall.yaml
-- name: adding materials 
-  import_tasks: files.yaml
+- name: Start mysqld service
+  systemd: name=mysqld state=started enabled=yes
 
+- name: Set MySQL root Password
+  mysql_user:
+    login_host: 'localhost'
+    login_user: 'root'
+    login_password: ''
+    name: 'root'
+    password: '{{ mysql_root_password }}'
+    state: present
+
+- name: Creates database for WordPress
+  mysql_db:
+    name: "{{ mysql_db }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Create MySQL user for WordPress
+  mysql_user:
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_password }}"
+    priv: "{{ mysql_db }}.*:ALL"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+- name: Download and unpack latest WordPress
+  unarchive:
+#src: https://wordpress.org/latest.tar.gz
+    src: latest.tar.gz
+    dest: "/var/www/{{ http_host }}"
+    remote_src: yes
+    creates: "/var/www/{{ http_host }}/wordpress"
+
+- name: Set ownership
+  file:
+    path: "/var/www/{{ http_host }}"
+    state: directory
+    recurse: yes
+    owner: apache
+    group: apache
+
+- name: Set permissions for directories
+  shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 750 {} \\;"
+
+- name: Set permissions for files
+  shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 640 {} \\;"
+
+- name: Copy sample config file
+  command: mv /var/www/{{ http_host }}/wordpress/wp-config-sample.php /var/www/{{ http_host }}/wordpress/wp-config.php creates=/var/www/{{ http_host }}/wordpress/wp-config.php
+  become: yes
+
+- name: Update WordPress config file
+  lineinfile:
+    path: "/var/www/{{ http_host }}/wordpress/wp-config.php"
+    regexp: "{{item.regexp}}"
+    line: "{{item.line}}"
+  with_items:
+    - {'regexp': "define\\( 'DB_NAME', '(.)+' \\);", 'line': "define( 'DB_NAME', '{{mysql_db}}' );"}
+    - {'regexp': "define\\( 'DB_USER', '(.)+' \\);", 'line': "define( 'DB_USER', '{{mysql_user}}' );"}
+    - {'regexp': "define\\( 'DB_PASSWORD', '(.)+' \\);", 'line': "define( 'DB_PASSWORD', '{{mysql_password}}' );"}
+ 
+- name: Restart httpd service
+  systemd: name=httpd state=restarted
+  become: yes
+- name: Disable SELinux Permanently (Reboot Required)
+  selinux: state=disabled
+
+- name: Disable SELinux Without Reboot
+  command: /sbin/setenforce 0
+
+- name: Configure Firewall
+  firewalld: zone=public service=http permanent=yes state=enabled
+
+- name: Reload Firewall
+  systemd: name=firewalld state=reloaded
