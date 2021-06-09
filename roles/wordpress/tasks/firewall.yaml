@@ -1,11 +1,11 @@
-- name:
+- name: adding apache in firewalld
   firewalld:
     service: http
     permanent: yes
     immediate: yes
     state:  enabled
 
-- name: 
+- name: adding database in firewalld
   firewalld: 
     service: mysql 
     permanent: yes

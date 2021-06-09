@@ -1,4 +1,4 @@
-- name: 
+- name: Installing apache and php requirement packages
   yum:
     name: "{{item}}"
     state: present 
@@ -10,17 +10,18 @@
     - php-mysqlnd
     - php-mbstring
     - php-opcache
-- name: Install MySQL server on RHEL/CENTOS 8
+- name: Installing packages for database
   yum:
     name: "{{item}}"
     state: present
   loop: 
     - mariadb-server
     - mariadb
-- dnf:
+- name: Installing requirement packages for database
+  dnf:
     name: python3-PyMySQL
     state: present
-- name: Starting mysql service 
+- name: Starting service of database: mysql
   service:
     name: mariadb
     state: started

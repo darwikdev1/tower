@@ -1,4 +1,4 @@
-- name: Set MySQL root Password
+- name: setting MySQL root account password
   mysql_user:
     login_host: 'localhost'
     login_user: 'root'
@@ -8,10 +8,10 @@
     priv: "*.*:ALL,GRANT"
     state: present
 
-- name: create a new database
+- name: create a new database : wordpress
   mysql_db: name=wordpress state=present login_user=root
 
-- name: create a new user db
+- name: create a new database user : wordpressuser
   mysql_user:
     name: wordpressuser
     password: wuser
