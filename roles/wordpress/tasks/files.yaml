@@ -1,16 +1,20 @@
 - name: 
-  copy: 
-    src: wordpress
+  unarchive: 
+    src: wordpress.tar
     dest: /var/www/html/
-    recurse: yes 
-    owner: apache 
+- name: 
+  file: 
+    dest: /var/www/html/wordpress
+    owner: apache
     group: apache 
-
+    mode: 0777
+    recurse: yes 
 
 - name: create virtualhost
   lineinfile: 
     name: wordpress.conf 
-    path: /var/www/html/
+    path: /etc/httpd/conf.d/
+    create: yes 
     line: |
       <virtualhost *:80>
       servername "{{ansible_fqdn}}" 

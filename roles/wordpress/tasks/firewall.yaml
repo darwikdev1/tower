@@ -1,10 +1,13 @@
 - name:
   firewalld:
-    service: "{{item}}"
+    service: http
     permanent: yes
     immediate: yes
-    enabled: true
-  loop:
-    - mysql
-    - http
+    state:  enabled
 
+- name: 
+  firewalld: 
+    service: mysql 
+    permanent: yes
+    immediate: yes 
+    state: enabled

@@ -1,0 +1,19 @@
+--- 
+- name: 
+  hosts: servera 
+  tasks: 
+  - name: 
+    yum_repository: 
+      file: yum
+      name: AppStream
+      description: 'AppStream'
+      baseurl: http://black.lab.com/content/rhel8.3/x86_64/dvd/AppStream 
+      gpgcheck: no
+  - name: 
+    yum_repository: 
+      file: yum
+      name: BaseOS
+      description: 'BaseOS'
+      baseurl: http://black.lab.com/content/rhel8.3/x86_64/dvd/BaseOS 
+      gpgcheck: no
+
