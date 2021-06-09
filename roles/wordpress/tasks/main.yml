@@ -1,0 +1,25 @@
+---
+# tasks file for wordpress
+- name: Install apache 
+  yum: 
+    name: "{{item}}"
+    state: latest
+  loop: ['httpd','php','php-mysql']
+
+- name: Install Mysql Packages 
+  yum: 
+    name: "{{item}}"
+    state: latest
+  loop: ['mariadb-server', 'mariadb']
+
+- name: 
+  service: 
+    name: "{{item}}" 
+    state: started 
+    enabled: true 
+  loop: 
+    - mariadb
+    - httpd 
+
+
+    
