@@ -1,6 +1,7 @@
 --- 
 - name: install lampstack deploy 
   hosts: pod1.lab.example.com
+  ignore_errors: yes 
   roles: 
     - lampstack-web
     - php 

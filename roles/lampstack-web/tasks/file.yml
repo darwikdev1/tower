@@ -2,7 +2,7 @@
 - name: Set up Apache VirtualHost
   template:
     src: "files/httpd.conf"
-    dest: "/etc/httpd/conf.d/{{ http_conf }}"
+    dest: "/etc/httpd/conf.d/wordpress.conf"
     owner: root
     group: root
     mode: u=rw,g=r,o=r
@@ -39,8 +39,7 @@
   with_items:
     - {'regexp': "define\\( 'DB_NAME', '(.)+' \\);", 'line': "define( 'DB_NAME', 'wordpress' );"}
     - {'regexp': "define\\( 'DB_USER', '(.)+' \\);", 'line': "define( 'DB_USER', 'black' );"}
-    - {'regexp': "define\\( 'DB_PASSWORD', '(.)+' \\);", 'line': "define( 'DB_PASSWORD', '{{new}}' );"}192.168.0.211
- 
+    - {'regexp': "define\\( 'DB_PASSWORD', '(.)+' \\);", 'line': "define( 'DB_PASSWORD', '{{new}}' );"} 
 - name: Restart httpd service
   systemd: name=httpd state=restarted
   become: yes

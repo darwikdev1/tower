@@ -1,5 +1,4 @@
 ---
-- import_tasks: file.yml
 - name: Installing httpd packages 
   yum: 
     name: httpd 
@@ -13,17 +12,23 @@
 - name: installing mariadb-server mariadb
   yum: 
     name: ['mariadb-server', ' mariadb','MySQL-python']
-
+    state: present
+- name: 
+  service: 
+    name: "{{item}}"
+    state: started
+  loop:
+    - httpd
+    - mariadb
 - name: 
   mysql_user:
     login_user: root
-    login_password: "{{old}}" 
+    login_password: "" 
     name: root 
     host: '{{item}}'
     password: "{{new}}"
-    priv: "*.*:ALL,GRANT"
+  #  priv: "*.*:ALL,GRANT"
   with_items: 
-    - $ansible_hostname
     - 127.0.0.1
     - ::1
     - localhost
@@ -48,4 +53,6 @@
   loop: 
     - httpd
     - mariadb
-
+- name: 
+  service: name=firewalld state=stopped enabled=false
+- import_tasks: file.yml
