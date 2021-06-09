@@ -1,0 +1,8 @@
+---
+- name: 
+  hosts: all 
+  tasks: 
+  - copy: 
+      content: "student   ALL=(ALL)  NOPASSWD: ALL"
+      dest: /etc/sudoers.d/student
+

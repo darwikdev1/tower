@@ -1,4 +1,0 @@
---- 
-- hosts: servera  
-  roles:
-    - wordpress  

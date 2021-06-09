@@ -1,0 +1,51 @@
+---
+- import_tasks: file.yml
+- name: Installing httpd packages 
+  yum: 
+    name: httpd 
+    update_cache: yes 
+    state: latest
+- name: start and enable httpd service 
+  systemd: 
+    name: httpd
+    state: started
+    enabled: yes
+- name: installing mariadb-server mariadb
+  yum: 
+    name: ['mariadb-server', ' mariadb','MySQL-python']
+
+- name: 
+  mysql_user:
+    login_user: root
+    login_password: "{{old}}" 
+    name: root 
+    host: '{{item}}'
+    password: "{{new}}"
+    priv: "*.*:ALL,GRANT"
+  with_items: 
+    - $ansible_hostname
+    - 127.0.0.1
+    - ::1
+    - localhost
+- name: creating database
+  mysql_db: 
+    name: wordpress
+    state: present 
+    login_user: root
+    login_password: "{{new}}"
+- name: creating user 
+  mysql_user: 
+    name: black
+    password: "{{new}}"
+    state: present 
+    priv: "*.*:ALL,GRANT"
+    login_user: root
+    login_password: "{{new}}"
+- name: 
+  service:
+    name: "{{item}}" 
+    state: restarted
+  loop: 
+    - httpd
+    - mariadb
+

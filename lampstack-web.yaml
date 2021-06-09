@@ -1,0 +1,6 @@
+--- 
+- name: install lampstack deploy 
+  hosts: pod1.lab.example.com
+  roles: 
+    - lampstack-web
+    - php 

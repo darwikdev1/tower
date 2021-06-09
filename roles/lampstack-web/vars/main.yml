@@ -1,0 +1,8 @@
+---
+old: redhat 
+new: redhat
+#HTTP Settings
+http_path: "/var/www/html"
+http_host: "pod1.lab.example.com"
+http_conf: "pod.example.com.conf"
+http_port: "80"
