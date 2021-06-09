@@ -1,0 +1,20 @@
+- name: 
+  copy: 
+    src: wordpress
+    dest: /var/www/html/
+    recurse: yes 
+    owner: apache 
+    group: apache 
+
+
+- name: create virtualhost
+  lineinfile: 
+    name: wordpress.conf 
+    path: /var/www/html/
+    line: |
+      <virtualhost *:80>
+      servername "{{ansible_fqdn}}" 
+      documentRoot /var/www/html/wordpress 
+      </virtualhost> 
+  notify: 
+    - restart apache  

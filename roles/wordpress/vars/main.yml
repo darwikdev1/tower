@@ -1,2 +1,3 @@
 ---
 # vars file for wordpress
+mysql_pass: redhat 

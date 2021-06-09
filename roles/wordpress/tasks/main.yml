@@ -1,25 +1,11 @@
 ---
 # tasks file for wordpress
-- name: Install apache 
-  yum: 
-    name: "{{item}}"
-    state: latest
-  loop: ['httpd','php','php-mysql']
+- name: Installing php and mysql packages 
+  import_tasks: php_mysql.yaml
+- name: creating db users 
+  import_tasks: mysql_user.yaml
 
-- name: Install Mysql Packages 
-  yum: 
-    name: "{{item}}"
-    state: latest
-  loop: ['mariadb-server', 'mariadb']
-
-- name: 
-  service: 
-    name: "{{item}}" 
-    state: started 
-    enabled: true 
-  loop: 
-    - mariadb
-    - httpd 
+- name: Open Port in firewalld 
+  import_tasks: firewall.yaml
 
 
-    
