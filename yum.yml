@@ -3,6 +3,10 @@
   hosts: servera 
   tasks: 
   - name: 
+    copy: 
+      src: /etc/hosts 
+      dest: /etc/hosts
+  - name: 
     yum_repository: 
       file: yum
       name: AppStream
