@@ -1,17 +1,13 @@
----
+---   
+
 - name: Installing httpd packages 
   yum: 
     name: httpd 
     update_cache: yes 
     state: latest
-- name: start and enable httpd service 
-  systemd: 
-    name: httpd
-    state: started
-    enabled: yes
 - name: installing mariadb-server mariadb
   yum: 
-    name: ['mariadb-server', ' mariadb','MySQL-python']
+    name: ['mariadb-server', 'mariadb','MySQL-python']
     state: present
 - name: 
   service: 
@@ -20,7 +16,7 @@
   loop:
     - httpd
     - mariadb
-- name: 
+- name: setting mysql root password 
   mysql_user:
     login_user: root
     login_password: "" 
@@ -32,13 +28,13 @@
     - 127.0.0.1
     - ::1
     - localhost
-- name: creating database
+- name: creating wordpress database
   mysql_db: 
     name: wordpress
     state: present 
     login_user: root
     login_password: "{{new}}"
-- name: creating user 
+- name: creating black user in mysql 
   mysql_user: 
     name: black
     password: "{{new}}"
@@ -46,7 +42,7 @@
     priv: "*.*:ALL,GRANT"
     login_user: root
     login_password: "{{new}}"
-- name: 
+- name: starting service 
   service:
     name: "{{item}}" 
     state: restarted
@@ -56,3 +52,10 @@
 - name: 
   service: name=firewalld state=stopped enabled=false
 - import_tasks: file.yml
+
+- name: 
+  service:
+    name: httpd
+    state: restarted
+    state: enabled 
+
