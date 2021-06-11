@@ -1,0 +1,10 @@
+---
+- name: Openstack Victoria Install 
+  hosts: localhost
+  ignore_errors: yes
+  become: True 
+  become_method: sudo 
+  become_user: root  
+  roles: 
+    - requirement
+
