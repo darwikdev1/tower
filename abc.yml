@@ -1,0 +1,7 @@
+---
+- name: 
+  hosts: servera
+  tasks: 
+  - name:
+    debug: 
+      msg: "hello world" 
