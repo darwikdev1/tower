@@ -1,6 +1,6 @@
 ---
 - name: 
-  hosts: servera
+  hosts: worker1.example.com
   tasks: 
   - name:
     debug: 
