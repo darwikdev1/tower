@@ -1,0 +1,9 @@
+---
+- name: 
+  hosts: 
+    - nodes 
+  tasks: 
+  - name: 
+    debug: 
+      msg: "{{ansible_fqdn}}"
+      
