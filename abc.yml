@@ -1,6 +1,6 @@
 ---
 - name: 
-  hosts: worker1.example.com
+  hosts: localhost 
   tasks: 
   - name:
     debug: 
